@@ -1,9 +1,13 @@
 Avionics Full-Duplex Switched Ethernet for OMNeT++
 ==================================================
 
-This model is licensed under the LGPL.
+This model is licensed under the LGPLv3.
 
-NOTES:
+Contributers: 
+Ipek Gokce <ipek.peskirci@gmail.com>
+Emre Atik <>
 
-- The model contains only the MAC layer implementation.
-- Higher layer functions are not implemented.
+- This model is based on https://github.com/omnetpp-models/afdx. 
+- It is compatible with OMNeT++ v.6 and uses the queueinglib version that is released with OMNeT++ v.6
+- Since queueinglib is an external library, it is seperated from the original project and added to project as an external library. Hence there are two main folders in this projects, afdx and queueinglib.
+
