@@ -15,13 +15,14 @@
 
 namespace afdx {
 
-class VLRouter : public cSimpleModule
-{
+class VLRouter: public cSimpleModule {
 private:
     typedef std::multimap<int, int> VirtualLinkIdToPortMap_t;
     VirtualLinkIdToPortMap_t vlToOutPortMappings;
-    void getVirtualLinkToPortMappings(VirtualLinkIdToPortMap_t &vlToPortMapping, const char *fileName);
-    void routePacket(VirtualLinkIdToPortMap_t &VLToPortMapping, AFDXMessage *afdxMessage);
+    void getVirtualLinkToPortMappings(VirtualLinkIdToPortMap_t &vlToPortMapping,
+            const char *fileName);
+    void routePacket(VirtualLinkIdToPortMap_t &VLToPortMapping,
+            AFDXMessage *afdxMessage);
 
 protected:
     virtual void initialize();

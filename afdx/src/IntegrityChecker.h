@@ -15,8 +15,7 @@ namespace afdx {
 /**
  * TODO - Generated class
  */
-class IntegrityChecker : public cSimpleModule
-{
+class IntegrityChecker: public cSimpleModule {
 private:
     int expectedSeqNum;
     typedef std::map<int, int> NextSeqNumberToVLID_t;

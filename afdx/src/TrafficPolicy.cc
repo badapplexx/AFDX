@@ -17,15 +17,13 @@ namespace afdx {
 
 Define_Module(TrafficPolicy);
 
-void TrafficPolicy::initialize()
-{
+void TrafficPolicy::initialize() {
     bandwidthMbps = par("bandwidth").intValue();
     minJitter = par("minJitter").doubleValue();
     minJitter /= 1000;
 }
 
-void TrafficPolicy::handleMessage(cMessage *msg)
-{
+void TrafficPolicy::handleMessage(cMessage *msg) {
     const int phyOverhead_bit = 20 * 8;
     AFDXMessage *afdxMessage = check_and_cast<AFDXMessage*>(msg);
     int VLid = afdxMessage->getVirtualLinkId();
@@ -37,7 +35,8 @@ void TrafficPolicy::handleMessage(cMessage *msg)
     TokenBucketMap_t::iterator itr = tokenBucket.find(VLid);
 
     bool isRecordCreditEnabled = false;
-    NetworkStatistics::SwitchDefinition sw = NetworkStatistics::getInstance()->getSwitchDefinition(this);
+    NetworkStatistics::SwitchDefinition sw =
+            NetworkStatistics::getInstance()->getSwitchDefinition(this);
     if (NetworkStatistics::getInstance()->isInSwitchAPort(sw)) {
         isRecordCreditEnabled = true;
     }
@@ -46,48 +45,50 @@ void TrafficPolicy::handleMessage(cMessage *msg)
     if (itr == tokenBucket.end()) {
         tokenBucket[VLid] = sigma_bit;
         if (isRecordCreditEnabled)
-            afdx::NetworkStatistics::getInstance()->record(CREDIT_PER_VL_PER_SW, afdxMessage->getVirtualLinkId(),
-                    tokenBucket[VLid], sw.index);
-    }
-    else {
+            afdx::NetworkStatistics::getInstance()->record(CREDIT_PER_VL_PER_SW,
+                    afdxMessage->getVirtualLinkId(), tokenBucket[VLid],
+                    sw.index);
+    } else {
         timeDiff_s = simTime().dbl() - lastTime[VLid];
         obtainedCredit_bit = timeDiff_s * rho_bit;
 
         if (tokenBucket[VLid] + obtainedCredit_bit > sigma_bit) {
             tokenBucket[VLid] = sigma_bit;
-        }
-        else {
+        } else {
             tokenBucket[VLid] += obtainedCredit_bit;
         }
         if (isRecordCreditEnabled)
-            afdx::NetworkStatistics::getInstance()->record(CREDIT_PER_VL_PER_SW, afdxMessage->getVirtualLinkId(),
-                    tokenBucket[VLid], sw.index);
+            afdx::NetworkStatistics::getInstance()->record(CREDIT_PER_VL_PER_SW,
+                    afdxMessage->getVirtualLinkId(), tokenBucket[VLid],
+                    sw.index);
     }
     if (tokenBucket[VLid] < frameSize_bit) {
         isTokenSufficient = false;
         int diff = tokenBucket[VLid] - frameSize_bit;
         if (isRecordCreditEnabled) {
-            afdx::NetworkStatistics::getInstance()->record(CREDIT_PER_VL_PER_SW, afdxMessage->getVirtualLinkId(), diff,
+            afdx::NetworkStatistics::getInstance()->record(CREDIT_PER_VL_PER_SW,
+                    afdxMessage->getVirtualLinkId(), diff, sw.index);
+            afdx::NetworkStatistics::getInstance()->record(CREDIT_PER_VL_PER_SW,
+                    afdxMessage->getVirtualLinkId(), tokenBucket[VLid],
                     sw.index);
-            afdx::NetworkStatistics::getInstance()->record(CREDIT_PER_VL_PER_SW, afdxMessage->getVirtualLinkId(),
-                    tokenBucket[VLid], sw.index);
         }
-    }
-    else {
+    } else {
         tokenBucket[VLid] -= frameSize_bit;
         if (isRecordCreditEnabled)
-            afdx::NetworkStatistics::getInstance()->record(CREDIT_PER_VL_PER_SW, afdxMessage->getVirtualLinkId(),
-                    tokenBucket[VLid], sw.index);
+            afdx::NetworkStatistics::getInstance()->record(CREDIT_PER_VL_PER_SW,
+                    afdxMessage->getVirtualLinkId(), tokenBucket[VLid],
+                    sw.index);
     }
 
     if (isTokenSufficient) {
         send(msg, "out");
-    }
-    else {
+    } else {
         if (isRecordCreditEnabled)
-            NetworkStatistics::getInstance()->record(afdx::DROPPED_FRAMES_TRAFFIC_POLICY_PER_VL,
+            NetworkStatistics::getInstance()->record(
+                    afdx::DROPPED_FRAMES_TRAFFIC_POLICY_PER_VL,
                     afdxMessage->getVirtualLinkId(), sw.index);
-        std::cout << "TOKEN_INSUFFICIENT (VL:" << VLid << ") SW:" << sw.index << endl;
+        std::cout << "TOKEN_INSUFFICIENT (VL:" << VLid << ") SW:" << sw.index
+                << endl;
         delete msg;
     }
     lastTime[VLid] = simTime().dbl();

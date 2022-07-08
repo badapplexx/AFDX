@@ -17,8 +17,7 @@ namespace afdx {
 /**
  * A full duplex Ethernet MAC module
  */
-class MAC : public cSimpleModule, public queueing::IServer
-{
+class MAC: public cSimpleModule, public queueing::IServer {
 private:
     queueing::SelectionStrategy *selectionStrategy;
     bool isReserved;

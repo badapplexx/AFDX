@@ -10,13 +10,11 @@ namespace afdx {
 
 Define_Module(FrameFilter);
 
-void FrameFilter::initialize()
-{
+void FrameFilter::initialize() {
     // TODO - Generated method body
 }
 
-void FrameFilter::handleMessage(cMessage *msg)
-{
+void FrameFilter::handleMessage(cMessage *msg) {
     send(msg, "out");
 }
 

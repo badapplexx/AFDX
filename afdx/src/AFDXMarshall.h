@@ -14,8 +14,7 @@
 
 namespace afdx {
 
-class AFDXMarshall : public cSimpleModule
-{
+class AFDXMarshall: public cSimpleModule {
 private:
     double delay = 0;
     uint32_t numbeOfSwitches = 0;

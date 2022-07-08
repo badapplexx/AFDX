@@ -18,8 +18,7 @@ namespace afdx {
  * Also add increasing sequence number to the frames, and
  * set the interface id too in the frame
  */
-class RedundancyController : public cSimpleModule
-{
+class RedundancyController: public cSimpleModule {
 private:
     bool isNetworkA_Enabled;
     bool isNetworkB_Enabled;

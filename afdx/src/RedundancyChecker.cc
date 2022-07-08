@@ -13,25 +13,21 @@ namespace afdx {
 
 Define_Module(RedundancyChecker);
 
-void RedundancyChecker::initialize()
-{
+void RedundancyChecker::initialize() {
     this->isEnabled = par("enabled");
     this->skewMax = par("skewMax");
 }
 
-void RedundancyChecker::handleMessage(cMessage *msg)
-{
+void RedundancyChecker::handleMessage(cMessage *msg) {
     // if not enabled just pass through all frames received
     if (!isEnabled) {
         send(msg, "out");
-    }
-    else // filter out redundant messages
+    } else // filter out redundant messages
     {
         std::string nwString = "";
         if (msg->arrivedOn("inA")) {
             nwString = "NW-A";
-        }
-        else {
+        } else {
             nwString = "NW-B";
         }
         AFDXMessage *afdxMsg = check_and_cast<AFDXMessage*>(msg);
@@ -50,12 +46,10 @@ void RedundancyChecker::handleMessage(cMessage *msg)
             if ((simTime() - lastFrameReceived[vlid] <= skewMax)) {
                 //less than skewMax time has passed
                 delete msg;
-            }
-            else {
+            } else {
                 send(msg, "out");
             }
-        }
-        else {
+        } else {
             send(msg, "out");
         }
         lastFrameReceived[vlid] = simTime();

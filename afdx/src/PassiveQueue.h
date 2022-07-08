@@ -33,8 +33,7 @@ namespace queueing
 /**
  * A passive queue, designed to co-operate with IServer using method calls.
  */
-class PassiveQueue : public cSimpleModule, public IPassiveQueue
-{
+class PassiveQueue: public cSimpleModule, public IPassiveQueue {
 private:
 
 #ifdef AFDX_PQ

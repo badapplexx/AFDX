@@ -10,25 +10,20 @@ namespace afdx {
 
 Define_Module(SkewMaxTester);
 
-void SkewMaxTester::initialize()
-{
+void SkewMaxTester::initialize() {
     // TODO - Generated method body
     isSkewMaxTestEnabled = par("skewMaxTestEnabled");
 }
 
-void SkewMaxTester::handleMessage(cMessage *msg)
-{
+void SkewMaxTester::handleMessage(cMessage *msg) {
     if (!isSkewMaxTestEnabled) {
         if (msg->arrivedOn("in_A")) // received on Ethernet in port
                 {
             send(msg, "out_fromA");
-        }
-        else {
+        } else {
             send(msg, "out_fromB");
         }
-    }
-    else {
-
+    } else {
 
         cGate *ethOutGateA = gate("out_fromA");
         cGate *ethOutGateB = gate("out_fromB");
@@ -36,8 +31,7 @@ void SkewMaxTester::handleMessage(cMessage *msg)
         std::string networkString = "";
         if (msg->arrivedOn("in_A")) {
             networkString = "NW-A";
-        }
-        else {
+        } else {
             networkString = "NW-B";
         }
         static int lastSentFrom = 0;
@@ -50,37 +44,38 @@ void SkewMaxTester::handleMessage(cMessage *msg)
                     if (msg->arrivedOn("in_A")) {
                         lastSentFrom = 1;
                         send(msg, ethOutGateA);
-                        std::cout << simTime() << "|SkewTester|Forwarding (SN: " << seqNo << "):NW-A" << endl;
+                        std::cout << simTime() << "|SkewTester|Forwarding (SN: "
+                                << seqNo << "):NW-A" << endl;
                         return;
-                    }
-                    else if (msg->arrivedOn("in_B")) {
+                    } else if (msg->arrivedOn("in_B")) {
                         lastSentFrom = 2;
                         send(msg, ethOutGateB);
-                        std::cout << simTime() << "|SkewTester|Forwarding (SN: " << seqNo << "):NW-B" << endl;
+                        std::cout << simTime() << "|SkewTester|Forwarding (SN: "
+                                << seqNo << "):NW-B" << endl;
                         return;
                     }
-                }
-                else {
-                    std::cout << simTime() << "|SkewTester|Deleted (SN: " << seqNo << ")" << endl;
+                } else {
+                    std::cout << simTime() << "|SkewTester|Deleted (SN: "
+                            << seqNo << ")" << endl;
                     return;
                 }
-            }
-            else if (seqNo > 50 && seqNo < 65) {
-                std::cout << simTime() << "|SkewTester|Deleted (SN: " << seqNo << "):" << networkString << endl;
+            } else if (seqNo > 50 && seqNo < 65) {
+                std::cout << simTime() << "|SkewTester|Deleted (SN: " << seqNo
+                        << "):" << networkString << endl;
                 delete msg;
                 return;
-            }
-            else if (seqNo == 65) {
+            } else if (seqNo == 65) {
                 if (lastSentFrom == 1) {
-                    std::cout << simTime() << "|SkewTester|Changed (SN: " << seqNo << " -> ";
+                    std::cout << simTime() << "|SkewTester|Changed (SN: "
+                            << seqNo << " -> ";
                     afdxMsg->setSeqNum(50);
                     send(msg, ethOutGateB);
                     lastSentFrom = 2;
                     std::cout << afdxMsg->getSeqNum() << "):NW-B" << endl;
                     return;
-                }
-                else if (lastSentFrom == 2) {
-                    std::cout << simTime() << "|SkewTester|Changed (SN: " << seqNo << " -> ";
+                } else if (lastSentFrom == 2) {
+                    std::cout << simTime() << "|SkewTester|Changed (SN: "
+                            << seqNo << " -> ";
                     afdxMsg->setSeqNum(50);
 //					sentOrDeleted = true;
                     send(msg, ethOutGateA);
@@ -88,27 +83,26 @@ void SkewMaxTester::handleMessage(cMessage *msg)
                     std::cout << afdxMsg->getSeqNum() << "):NW-A" << endl;
                     return;
                 }
-            }
-            else {
+            } else {
                 lastSentFrom = 0;
             }
         }
 
         if (msg->arrivedOn("in_A")) {
             if (vlid == 1) {
-                std::cout << simTime() << "|SkewTester|Forwarding (SN: " << seqNo << "):NW-A" << endl;
+                std::cout << simTime() << "|SkewTester|Forwarding (SN: "
+                        << seqNo << "):NW-A" << endl;
             }
             cGate *ethOutGate = gate("out_fromA");
             send(msg, ethOutGate);
-        }
-        else if (msg->arrivedOn("in_B")) {
+        } else if (msg->arrivedOn("in_B")) {
             if (vlid == 1) {
-                std::cout << simTime() << "|SkewTester|Forwarding (SN: " << seqNo << "):NW-B" << endl;
+                std::cout << simTime() << "|SkewTester|Forwarding (SN: "
+                        << seqNo << "):NW-B" << endl;
             }
             cGate *ethOutGate = gate("out_fromB");
             send(msg, ethOutGate);
-        }
-        else {
+        } else {
             delete (msg);
         }
 

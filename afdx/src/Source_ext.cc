@@ -11,8 +11,7 @@ namespace afdx {
 
 Define_Module(Source_ext);
 
-void Source_ext::initialize()
-{
+void Source_ext::initialize() {
     this->jobCounter = 0;
     this->startTime = par("startTime");
     this->stopTime = par("stopTime");
@@ -21,11 +20,11 @@ void Source_ext::initialize()
     Source::initialize();
 }
 
-void Source_ext::handleMessage(cMessage *msg)
-{
+void Source_ext::handleMessage(cMessage *msg) {
     ASSERT(msg->isSelfMessage());
 
-    if ((this->numJobs < 0 || this->numJobs > jobCounter) && (this->stopTime < 0 || this->stopTime > simTime())) {
+    if ((this->numJobs < 0 || this->numJobs > jobCounter)
+            && (this->stopTime < 0 || this->stopTime > simTime())) {
         // reschedule the timer for the next message
         scheduleAt(simTime() + par("interArrivalTime"), msg);
 
@@ -33,18 +32,15 @@ void Source_ext::handleMessage(cMessage *msg)
             SendOptions so;
             so.duration(SIMTIME_ZERO);
             send(this->createJob(), so, "out");
-        }
-        else {
+        } else {
             send(this->createJob(), "out");
         }
-    }
-    else {
+    } else {
         delete msg;
     }
 }
 
-Job* Source_ext::createJob()
-{
+Job* Source_ext::createJob() {
     SubsystemMessage *msg = new SubsystemMessage();
     msg->setPriority(par("jobPriority").intValue());
     msg->setPacketLength(par("packetLength").intValue());

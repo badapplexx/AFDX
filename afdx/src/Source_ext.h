@@ -15,8 +15,7 @@
 
 using namespace queueing;
 namespace afdx {
-class Source_ext : public Source
-{
+class Source_ext: public Source {
 private:
     simtime_t startTime;
     simtime_t stopTime;

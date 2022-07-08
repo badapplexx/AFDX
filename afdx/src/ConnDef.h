@@ -16,8 +16,7 @@ namespace afdx {
 /**
  * TODO - Generated class
  */
-class ConnDef : public cSimpleModule
-{
+class ConnDef: public cSimpleModule {
 };
 
 } //namespace
