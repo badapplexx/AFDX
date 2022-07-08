@@ -15,8 +15,7 @@ using namespace omnetpp;
 
 namespace afdx {
 
-enum RecordType_t
-{
+enum RecordType_t {
     E2E_LATENCY_PER_VL = 0,
     ES_BAG_LATENCY_PER_VL,
     ES_SCHEDULING_LATENCY_PER_VL,
@@ -30,39 +29,35 @@ enum RecordType_t
     CREDIT_PER_VL_PER_SW,
     E2E_LATENCY_PER_VL_PER_RECEIVER_ES,
     SWITCH_QUEUEING_TIME_PER_VL_PER_SW,
-    SWITCH_QUEUE_LENGTH_PER_VL_PER_SW,
+    SWITCH_QUEUEING_TIME_PER_SW_PER_PORT,
+    SWITCH_QUEUE_LENGTH_PER_SW_PER_PORT,
 };
 
-class NetworkStatistics
-{
+class NetworkStatistics {
 public:
     typedef int VLID_t;
     typedef int Index_t;
-    struct SwitchDefinition
-    {
+    struct SwitchDefinition {
         int index; //id:-1 means this is not a switch
         bool isA;
         bool isInPort;
-        bool operator <(const SwitchDefinition &rhs) const
-        {
-            return std::tie(this->isA, this->index, this->isInPort) < std::tie(rhs.isA, rhs.index, rhs.isInPort);
+        bool operator <(const SwitchDefinition &rhs) const {
+            return std::tie(this->isA, this->index, this->isInPort)
+                    < std::tie(rhs.isA, rhs.index, rhs.isInPort);
         }
     };
-    struct KeyForRecordPerVLPerIndex_t
-    {
+    struct KeyForRecordPerVLPerIndex_t {
         VLID_t vlid;
         Index_t index;
-        bool operator <(const KeyForRecordPerVLPerIndex_t &rhs) const
-        {
-            return std::tie(this->vlid, this->index) < std::tie(rhs.vlid, rhs.index);
+        bool operator <(const KeyForRecordPerVLPerIndex_t &rhs) const {
+            return std::tie(this->vlid, this->index)
+                    < std::tie(rhs.vlid, rhs.index);
         }
     };
-    struct KeyForRecordPerSWPerIndex_t
-    {
+    struct KeyForRecordPerSWPerIndex_t {
         SwitchDefinition sw;
         Index_t index;
-        bool operator <(const KeyForRecordPerSWPerIndex_t &rhs) const
-        {
+        bool operator <(const KeyForRecordPerSWPerIndex_t &rhs) const {
             return std::tie(this->sw, this->index) < std::tie(rhs.sw, rhs.index);
         }
     };
@@ -70,15 +65,20 @@ public:
 
     // index is used when additional indexes are needed such as switch index or es-index.
     void createRecorder(RecordType_t type, VLID_t key, int index = -1);
-    void createRecorder(RecordType_t type, SwitchDefinition key, int index = -1);
+    void createRecorder(RecordType_t type, SwitchDefinition key,
+            int index = -1);
 
-    int record(RecordType_t type, VLID_t key, double value2Record, int swIndex = -1);
-    void record(RecordType_t type, SwitchDefinition key, double value2Record, int index = -1);
+    int record(RecordType_t type, VLID_t key, double value2Record, int swIndex =
+            -1);
+    void record(RecordType_t type, SwitchDefinition key, double value2Record,
+            int index = -1);
 
-    int getQueueLengthCount(SwitchDefinition s);
-    void increaseQueueLengthCount(SwitchDefinition s);
-    void decreaseQueueLengthCount(SwitchDefinition s);
-    void createQueueLengthCounter(SwitchDefinition s);
+    int getQueueLengthCountInBit(SwitchDefinition s);
+    void increaseQueueLengthCountInBit(SwitchDefinition s,
+            uint64_t messageLenInBit);
+    void decreaseQueueLengthCountInBit(SwitchDefinition s,
+            uint64_t messageLenInBit);
+    void createQueueLengthCounterInBit(SwitchDefinition s);
 
     SwitchDefinition getSwitchDefinition(cModule *where);
     bool isInSwitchAPort(SwitchDefinition key, int idToCheck = -1);
@@ -104,11 +104,12 @@ private:
     RecordPerVLPerIndex_t e2eLatencyAtRxES;
     RecordPerVLPerIndex_t swQueueingTimePV;
     RecordPerSWPerIndex_t swQueueingLenPerSwPerPort;
+    RecordPerSWPerIndex_t swQueueingTimePerSwPerPort;
 
     RecordPerSW_t swQueueLengthPSRecorder;
     RecordPerSW_t swQueueingTimePSRecorder;
     std::map<int, int> queueCounterPerSwitch;
-
+    std::map<int, int> queueCounterInBitPerSwitch;
     NetworkStatistics();
     std::string toHexString(int num);
 
