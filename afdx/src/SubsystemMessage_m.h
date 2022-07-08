@@ -33,7 +33,7 @@ class SubsystemMessage;
 namespace afdx {
 
 /**
- * Class generated from <tt>SubsystemMessage.msg:25</tt> by opp_msgtool.
+ * Class generated from <tt>SubsystemMessage.msg:16</tt> by opp_msgtool.
  * <pre>
  * message SubsystemMessage extends queueing::Job
  * {

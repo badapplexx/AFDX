@@ -33,7 +33,7 @@ class AFDXMessage;
 namespace afdx {
 
 /**
- * Class generated from <tt>AFDXMessage.msg:28</tt> by opp_msgtool.
+ * Class generated from <tt>AFDXMessage.msg:22</tt> by opp_msgtool.
  * <pre>
  * //
  * // A Message describing an AFDX msg. (length)  
