@@ -40,7 +40,8 @@ namespace afdx {
  * }
  * </pre>
  */
-class SubsystemMessage: public ::queueing::Job {
+class SubsystemMessage : public ::queueing::Job
+{
 protected:
     int partitionId = 0;
     int packetLength = 0;
@@ -56,7 +57,8 @@ public:
     SubsystemMessage(const SubsystemMessage &other);
     virtual ~SubsystemMessage();
     SubsystemMessage& operator=(const SubsystemMessage &other);
-    virtual SubsystemMessage* dup() const override {
+    virtual SubsystemMessage* dup() const override
+    {
         return new SubsystemMessage(*this);
     }
     virtual void parsimPack(omnetpp::cCommBuffer *b) const override;
@@ -69,11 +71,12 @@ public:
     virtual void setPacketLength(int packetLength);
 };
 
-inline void doParsimPacking(omnetpp::cCommBuffer *b,
-        const SubsystemMessage &obj) {
+inline void doParsimPacking(omnetpp::cCommBuffer *b, const SubsystemMessage &obj)
+{
     obj.parsimPack(b);
 }
-inline void doParsimUnpacking(omnetpp::cCommBuffer *b, SubsystemMessage &obj) {
+inline void doParsimUnpacking(omnetpp::cCommBuffer *b, SubsystemMessage &obj)
+{
     obj.parsimUnpack(b);
 }
 
@@ -81,7 +84,8 @@ inline void doParsimUnpacking(omnetpp::cCommBuffer *b, SubsystemMessage &obj) {
 
 namespace omnetpp {
 
-template<> inline afdx::SubsystemMessage* fromAnyPtr(any_ptr ptr) {
+template<> inline afdx::SubsystemMessage* fromAnyPtr(any_ptr ptr)
+{
     return check_and_cast<afdx::SubsystemMessage*>(ptr.get<cObject>());
 }
 

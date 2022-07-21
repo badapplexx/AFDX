@@ -79,7 +79,8 @@ namespace afdx {
  * }
  * </pre>
  */
-class AFDXMessage: public ::queueing::Job {
+class AFDXMessage : public ::queueing::Job
+{
 protected:
     int networkId = 0;
     int equipmentId = 0;
@@ -107,7 +108,8 @@ public:
     AFDXMessage(const AFDXMessage &other);
     virtual ~AFDXMessage();
     AFDXMessage& operator=(const AFDXMessage &other);
-    virtual AFDXMessage* dup() const override {
+    virtual AFDXMessage* dup() const override
+    {
         return new AFDXMessage(*this);
     }
     virtual void parsimPack(omnetpp::cCommBuffer *b) const override;
@@ -141,8 +143,7 @@ public:
     virtual void setSigma(double sigma);
 
     virtual ::omnetpp::simtime_t getAFDXMarshallingTime() const;
-    virtual void setAFDXMarshallingTime(
-            ::omnetpp::simtime_t AFDXMarshallingTime);
+    virtual void setAFDXMarshallingTime(::omnetpp::simtime_t AFDXMarshallingTime);
 
     virtual ::omnetpp::simtime_t getRegLogExitTime() const;
     virtual void setRegLogExitTime(::omnetpp::simtime_t regLogExitTime);
@@ -157,10 +158,12 @@ public:
     virtual void setUdpDestPort(int udpDestPort);
 };
 
-inline void doParsimPacking(omnetpp::cCommBuffer *b, const AFDXMessage &obj) {
+inline void doParsimPacking(omnetpp::cCommBuffer *b, const AFDXMessage &obj)
+{
     obj.parsimPack(b);
 }
-inline void doParsimUnpacking(omnetpp::cCommBuffer *b, AFDXMessage &obj) {
+inline void doParsimUnpacking(omnetpp::cCommBuffer *b, AFDXMessage &obj)
+{
     obj.parsimUnpack(b);
 }
 
@@ -168,7 +171,8 @@ inline void doParsimUnpacking(omnetpp::cCommBuffer *b, AFDXMessage &obj) {
 
 namespace omnetpp {
 
-template<> inline afdx::AFDXMessage* fromAnyPtr(any_ptr ptr) {
+template<> inline afdx::AFDXMessage* fromAnyPtr(any_ptr ptr)
+{
     return check_and_cast<afdx::AFDXMessage*>(ptr.get<cObject>());
 }
 
