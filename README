@@ -5,9 +5,10 @@ This model is licensed under the LGPLv3.
 
 Contributers: 
 Ipek Gokce <ipek.peskirci@gmail.com>
-Emre Atik <>
+Emre Atik <emreatik94@gmail.com>
 
 - This model is based on https://github.com/omnetpp-models/afdx. 
 - It is compatible with OMNeT++ v.6 and uses the queueinglib version that is released with OMNeT++ v.6
 - Since queueinglib is an external library, it is seperated from the original project and added to project as an external library. Hence there are two main folders in this projects, afdx and queueinglib.
+- To be able to run this simulation via command line, please use run_ancat instead of run. And to be able to do that, run_ancat should be placed under afdx/simulations folder and it should be valled from mingw.cmd (with full path)
 
