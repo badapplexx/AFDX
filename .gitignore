@@ -1043,3 +1043,5 @@ dkms.conf
 *.vec
 *.vci
 *.sca
+*.dll
+*.a
