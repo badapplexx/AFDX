@@ -13,7 +13,8 @@
 using namespace omnetpp;
 
 namespace afdx {
-class SkewMaxTester: public cSimpleModule {
+class SkewMaxTester : public cSimpleModule
+{
 protected:
     bool isSkewMaxTestEnabled;
     virtual void initialize();

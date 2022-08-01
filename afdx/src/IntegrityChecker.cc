@@ -12,11 +12,13 @@ namespace afdx {
 
 Define_Module(IntegrityChecker);
 
-void IntegrityChecker::initialize() {
+void IntegrityChecker::initialize()
+{
     expectedSeqNum = 0;
 }
 
-bool IntegrityChecker::isSequenceNumberOk(int psn, int seqNo) {
+bool IntegrityChecker::isSequenceNumberOk(int psn, int seqNo)
+{
     //seqNo : [psn+1,psn+2]
     bool ret = false;
     int psnPlusOne = 0;
@@ -24,14 +26,17 @@ bool IntegrityChecker::isSequenceNumberOk(int psn, int seqNo) {
 
     if ((psn != 0) && (seqNo == 0)) {
         ret = true;
-    } else {
+    }
+    else {
         if (psn >= 255) {
             psnPlusOne = 1;
             psnPlusTwo = 2;
-        } else if (psn == 254) {
+        }
+        else if (psn == 254) {
             psnPlusOne = 255;
             psnPlusTwo = 1;
-        } else {
+        }
+        else {
             psnPlusOne = psn + 1;
             psnPlusTwo = psn + 2;
         }
@@ -43,7 +48,8 @@ bool IntegrityChecker::isSequenceNumberOk(int psn, int seqNo) {
 
     return ret;
 }
-void IntegrityChecker::handleMessage(cMessage *msg) {
+void IntegrityChecker::handleMessage(cMessage *msg)
+{
     // filter out redundant messages
     AFDXMessage *afdxMsg = check_and_cast<AFDXMessage*>(msg);
     int vlId = afdxMsg->getVirtualLinkId();
@@ -59,7 +65,8 @@ void IntegrityChecker::handleMessage(cMessage *msg) {
     int currSeqNum = afdxMsg->getSeqNum();
     if (true == isSequenceNumberOk(psn[vlId], currSeqNum)) {
         send(afdxMsg, "out");
-    } else {
+    }
+    else {
         delete msg;
     }
 

@@ -17,7 +17,8 @@ namespace afdx {
 
 using namespace queueing;
 
-class Sink_ext: public Sink {
+class Sink_ext : public Sink
+{
 private:
     uint32_t ESIndex = 0;
 protected:

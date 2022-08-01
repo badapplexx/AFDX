@@ -14,7 +14,8 @@
 
 namespace afdx {
 
-class RedundancyChecker: public cSimpleModule {
+class RedundancyChecker : public cSimpleModule
+{
 private:
     bool isEnabled;
     simtime_t skewMax;

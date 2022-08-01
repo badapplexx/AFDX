@@ -10,11 +10,13 @@ namespace afdx {
 
 Define_Module(RegulatorLogic);
 
-void RegulatorLogic::initialize() {
+void RegulatorLogic::initialize()
+{
     this->maxVLIDQueueSize = par("maxVLIDQueueSize");
 }
 
-void RegulatorLogic::handleMessage(cMessage *msg) {
+void RegulatorLogic::handleMessage(cMessage *msg)
+{
     if (msg->isSelfMessage()) {
         //Let's say a message is received & bag_queue[vlid] was empty -> afdxMsg is sent out.
         //In this case a self message is scheduled for BAG time later. When received, bag_queue will be checked for any other messages that
@@ -25,12 +27,12 @@ void RegulatorLogic::handleMessage(cMessage *msg) {
             bagFlagsPerVL[vlId] = 0;
             delete msg;
 
-        } else // some message received in the mean time.
+        }
+        else // some message received in the mean time.
         {
             // Pop and send that message
             // Schedule a self message for bag time later to process further messages(if any)
-            AFDXMessage *afdx_msg = check_and_cast<AFDXMessage*>(
-                    bagQueue[vlId].front());
+            AFDXMessage *afdx_msg = check_and_cast<AFDXMessage*>(bagQueue[vlId].front());
             double BAG = afdx_msg->getBagValue();
             send(bagQueue[vlId].front(), "out");
 
@@ -38,7 +40,8 @@ void RegulatorLogic::handleMessage(cMessage *msg) {
             bagQueue[vlId].pop();
             scheduleAt(simTime() + BAG, msg);
         }
-    } else {
+    }
+    else {
         //If queue is already empty, send message directly and schedule a self message for BAG time later. In the mean time:
         // if message received, push to queue and wait for scheduled self message to come.
         // else, bag_flags_per_vl[ vl_id ] flag will be cleaned by the code above
@@ -53,13 +56,12 @@ void RegulatorLogic::handleMessage(cMessage *msg) {
             //03.05.2022 update
             if (bagQueue[vlId].size() >= this->maxVLIDQueueSize) {
                 throw std::runtime_error(
-                        std::string(
-                                "Max limit for VLID queue is reached.(vlid:"
-                                        + std::to_string(vlId) + ")"));
+                        std::string("Max limit for VLID queue is reached.(vlid:" + std::to_string(vlId) + ")"));
             }
 
             bagQueue[vlId].push(msg);
-        } else	//This is the first message for this VLID or queue is empty
+        }
+        else	//This is the first message for this VLID or queue is empty
         {
             bagFlagsPerVL[vlId] = 1; //raise the flag to notify upper code about there is a message in the queue
 

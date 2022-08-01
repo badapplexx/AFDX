@@ -16,7 +16,8 @@
 
 namespace afdx {
 
-class TrafficPolicy: public cSimpleModule {
+class TrafficPolicy : public cSimpleModule
+{
 private:
     typedef int VirtualLinkId_t;
     typedef double TokenCredit_t;

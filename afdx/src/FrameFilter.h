@@ -14,7 +14,8 @@ namespace afdx {
 /**
  * TODO - Generated class
  */
-class FrameFilter: public cSimpleModule {
+class FrameFilter : public cSimpleModule
+{
 protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);

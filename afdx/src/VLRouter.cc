@@ -22,22 +22,22 @@ namespace afdx {
 
 Define_Module(VLRouter);
 
-void VLRouter::initialize() {
+void VLRouter::initialize()
+{
     this->configTableName = par("configTableName").str();
-    this->configTableName = this->configTableName.substr(1,
-            this->configTableName.length() - 2);
-    this->getVirtualLinkToPortMappings(this->vlToOutPortMappings,
-            configTableName.c_str());
+    this->configTableName = this->configTableName.substr(1, this->configTableName.length() - 2);
+    this->getVirtualLinkToPortMappings(this->vlToOutPortMappings, configTableName.c_str());
 }
 
-void VLRouter::handleMessage(cMessage *msg) {
+void VLRouter::handleMessage(cMessage *msg)
+{
     AFDXMessage *afdx_msg = check_and_cast<AFDXMessage*>(msg);
     this->routePacket(this->vlToOutPortMappings, afdx_msg);
     delete afdx_msg;
 }
 
-void VLRouter::getVirtualLinkToPortMappings(
-        VirtualLinkIdToPortMap_t &VLToPortMapping, const char *fileName) {
+void VLRouter::getVirtualLinkToPortMappings(VirtualLinkIdToPortMap_t &VLToPortMapping, const char *fileName)
+{
     std::ifstream fileStream(fileName);
 
     if (!(fileStream.good())) {
@@ -80,7 +80,8 @@ void VLRouter::getVirtualLinkToPortMappings(
             value = std::stoi(line.substr(indexBegin, indexEnd));
 
             VLToPortMapping.insert(std::pair<int, int>(key, value));
-        } else {
+        }
+        else {
             throw std::runtime_error(std::string("Invalid VL Table!"));
         }
     }
@@ -88,20 +89,19 @@ void VLRouter::getVirtualLinkToPortMappings(
     fileStream.close();
 }
 
-void VLRouter::routePacket(VirtualLinkIdToPortMap_t &vlToPortMapping,
-        AFDXMessage *afdxMessage) {
+void VLRouter::routePacket(VirtualLinkIdToPortMap_t &vlToPortMapping, AFDXMessage *afdxMessage)
+{
     int vlId = afdxMessage->getVirtualLinkId();
     auto keyValuePairs = vlToPortMapping.equal_range(vlId);
 
     if (keyValuePairs.first != keyValuePairs.second) {
-        for (auto itr = keyValuePairs.first; itr != keyValuePairs.second;
-                ++itr) {
-            EV_INFO << "VL Routing... [ ID: 0x" << std::hex << itr->first
-                           << " - PORT:" << std::dec << itr->second << " ]"
-                           << std::endl;
+        for (auto itr = keyValuePairs.first; itr != keyValuePairs.second; ++itr) {
+            EV_INFO << "VL Routing... [ ID: 0x" << std::hex << itr->first << " - PORT:" << std::dec << itr->second
+                    << " ]" << std::endl;
             send((cMessage*) afdxMessage->dup(), "out", itr->second);
         }
-    } else {
+    }
+    else {
         throw std::runtime_error(std::string("Key Not Found in VL Table!"));
     }
 }

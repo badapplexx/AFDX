@@ -16,7 +16,8 @@
 
 namespace afdx {
 
-class RegulatorLogic: public cSimpleModule {
+class RegulatorLogic : public cSimpleModule
+{
 private:
     typedef int TVirtualLinkId;
     typedef std::map<TVirtualLinkId, bool> BagFlagsPerVL_t;
