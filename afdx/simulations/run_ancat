@@ -1,6 +1,6 @@
 #!/bin/sh
+
 echo start ...
 cd `dirname $0`
-#cd /c/Workspaces/Github/AFDX_publish/afdx/simulations
 PATH=/c/omnetpp-6.0/bin:/opt/mingw64/bin:../../queueinglib:"$PATH" ../src/afdx.exe -m -u Cmdenv -c General -n ../src/:../../queueinglib AutoNetwork.ini
 echo finish ...
