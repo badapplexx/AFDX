@@ -12,6 +12,27 @@ Emre Atik <emreatik94@gmail.com>
 - Since queueinglib is an external library, it is seperated from the original project and added to project as an external library. Hence there are two main folders in this projects, afdx and queueinglib.
 - To be able to run this simulation via command line, please use run_ancat instead of run. And to be able to do that, run_ancat should be placed under afdx/simulations folder and it should be called from mingw.cmd (with full path)
 
+
+-------------------------------------------------------------------------------------
+Creating omnetpp project for the first time (for Windows):
+-------------------------------------------------------------------------------------
+0. Download the code and unzip. 
+
+1. Open omnetpp with new/existing workspace. 
+
+2. Import afdx and queueinglib projects seperately.
+	File -> Import -> General -> Existing Project into Workspace -> Select root directory: Downloaded code location.
+	Select both queueinglib and afdx, click Finish. 
+	
+3. Check afdx whether queueinglib is added as a referenced project.
+	Right click on afdx project ->Properties -> Project References.
+	
+4. Project now is ready. To simulate different AFDX networks, ini file can be updated. Also check ANCAT(https://github.com/badapplexx/ANCAT) to create ini files easily. 
+
+Note: By default, build configuration for afdx is debug and for queueinglib is release. Both of them should be in the same configuration.  
+To be able to run this properly, change one of them. 
+-------------------------------------------------------------------------------------
+
 -------------------------------------------------------------------------------------
 Instructiıns to build and run from console (for Windows):
 -------------------------------------------------------------------------------------
