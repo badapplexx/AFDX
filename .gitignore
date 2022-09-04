@@ -1045,3 +1045,7 @@ dkms.conf
 *.sca
 *.dll
 *.a
+*_m.cc
+*_m.h
+afdx/src/Makefile
+*.anf
